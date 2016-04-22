@@ -75,9 +75,6 @@
 					disinvheader += "<th>" + val + "</th>";
 				});
 				loaddata();
-				$('#displayTable tbody').on( 'click', 'tr', function () {
-			        $(this).toggleClass('selected');
-				});
 				
 				$('#selectbutton').click( function() {
 					//t.$('tr:not(.selected)').each( function () {
