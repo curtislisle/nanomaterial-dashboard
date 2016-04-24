@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:xlink="http://www.w3.org/1999/xlink">
   <head>
+
+
+
+
 	<title>PDF Extract Table</title>
     <style>
 	  html, body { height: 100%; }
@@ -38,62 +42,164 @@
 
   </head>
   <body>
-	<h3>PDF Extract Table</h3>
-	<div id="buttonDiv">
-		<button id="selectbutton">Submit selected rows</button>
-		<button id="revertbutton">Revert</button>
-		<button id="savebutton">Save view</button>
-		<div><input id="s1" type="radio" name="dataview" value="default" checked="true">Default<br>
-		<input id="s2" type="radio" name="dataview" value="inverted">Inverted<br>
-		</div>
-		<div class="example">
-		<div id="drop_zone">Drop files here</div>
-		<output id="list"></output>
-		</div>
-	</div>
-	<div id="tableDiv"></div>
-	<script>
-  function handleFileSelect(evt) {
 
-    evt.stopPropagation();
-    evt.preventDefault();
 
-    var files = evt.dataTransfer.files; // FileList object.
-    
-    if (files.length > 1) {
-		alert("You can only upload one file");
-		return;
-	}
+<!-- main page header navigation bar that references the modals here   -->
 
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    var file = files[0];
-      var reader = new FileReader();
-      reader.onloadend = function(evt) {
+<div id=info-panel class="modal fade draper" data-wf="1"  data-description="info panel">
+    <div class=modal-dialog>
+        <div class=modal-content>
+            <div class=modal-header>
+                <h3>Information</h3>
+            </div>
 
-			      output.push('<li><strong>', escape(file.name), '</strong> (', file.type || 'n/a', ') - ',
-                  file.size, ' bytes, last modified: ',
-                  file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
-                  //console.log(evt.target);
-                  loadpdf(evt.target.result, file.name);
-      };    
+            <div class=modal-body>
+                <p>Examine and Upload Records from a Scanned Publication</p>
+
+               <p>Compiled measurements for nanoparticles are sometimes available only through published technical papers.  </p>
+            </div>
+
+            <div class=modal-footer>
+                <a class="btn btn-default" data-dismiss=modal>OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id=help-panel class="modal fade draper" data-wf="1"  data-description="help panel">
+    <div class=modal-dialog>
+        <div class=modal-content>
+            <div class=modal-header>
+                <h3>Help for Table Upload Process</h3>
+            </div>
+
+            <div class=modal-body>
+                <p>To use:
+                    <ol>
+                        <li>Drop a PDF file containing a nanomaterial table to process
+                            in the drop area.
+
+                        <li>Wait while table ingest is in process.  A table of all the discovered
+                            rows in the datatable will be drawn below the controls.
+
+                        <li>Select several rows by directly selecting them (i.g. mouse click inside the row). 
+                            Each selected row will highlight, indicating it is being selected for possible upload
+                            to the database.
+
+                        <li>Once selection is complete, click the button labeled "Focus View on Selected Rows"
+                            to remove the non-selected rows from the view.
+
+                        <li>When the proper rows are selected, select the "Save Viewed Records to Database" button
+                            to perform a write of the selected records to the nanomaterial database
+
+                    </ol>
+               </p>
+            </div>
+
+            <div class=modal-footer>
+                <a class="btn btn-default" data-dismiss=modal>OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='video-panel' class="modal fade draper" data-wf="1"  data-description="intro video">
+    <div class=modal-dialog>
+        <div class=modal-content>
+            <div class=modal-header>
+                <h3>Intro Video</h3>
+            </div>
+
+            <div class=modal-body>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/S9Y79zhlIHo" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            https://www.youtube.com/watch?v=S9Y79zhlIHo&feature=youtu.be
+
+            <div class=modal-footer>
+                <a class="btn btn-default" data-dismiss=modal>Close Window</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- main page header navigation bar that references the modals here   -->
+
+<div class="navbar navbar-default navbar-fixed-top" >
+    <div class=navbar-header>
+        <a class=navbar-brand href=/examples>PDF Extract Table</a>
+    </div>
+
+    <ul class="nav navbar-nav">
+        <li><a style=cursor:pointer data-toggle=modal data-target=#info-panel><span class="glyphicon glyphicon-info-sign"></span> Info</a>
+        <li><a style=cursor:pointer data-toggle=modal data-target=#help-panel><span class="glyphicon glyphicon-question-sign"></span> Help</a>
+        <li><a style=cursor:pointer data-toggle=modal data-target=#video-panel><span class="glyphicon glyphicon-facetime-video"></span> Intro Video</a>
+    </ul>
+</div>
+
+
+<div style='margin-left: 40px; margin-top: 40px'>
+  	<div id="buttonDiv">
+
+      <div class="example">
+        <div id="drop_zone">Drop files here</div>
+        <output id="list"></output>
+      </div>
+
+  		<button id="selectbutton" style="margin-top:10px; margin-left: 10px">Focus View on Selected Rows</button>
+  		<button id="revertbutton" style="margin-top:10px; margin-left: 10px">Revert</button>
+  		<button id="savebutton"style="margin-top:10px; margin-left: 10px">Save Viewed Records to Database</button>
+  		<div><input id="s1" type="radio" name="dataview" value="default" style="margin-top: 10px; margin-left: 10px" checked="true">Default<br>
+  		<input id="s2" type="radio" name="dataview" style="margin-top: 10px; margin-left: 10px" value="inverted">Inverted<br>
+  		</div>
+
+  	</div>
+  	<div id="tableDiv"></div>
+  	<script>
+    function handleFileSelect(evt) {
+
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      var files = evt.dataTransfer.files; // FileList object.
       
-      reader.readAsDataURL(file);
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+      if (files.length > 1) {
+  		alert("You can only upload one file");
+  		return;
+  	}
 
-  }
+      // files is a FileList of File objects. List some properties.
+      var output = [];
+      var file = files[0];
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
 
-  function handleDragOver(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-  }
+  			      output.push('<li><strong>', escape(file.name), '</strong> (', file.type || 'n/a', ') - ',
+                    file.size, ' bytes, last modified: ',
+                    file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a',
+                    '</li>');
+                    //console.log(evt.target);
+                    loadpdf(evt.target.result, file.name);
+        };    
+        
+        reader.readAsDataURL(file);
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 
-  // Setup the dnd listeners.
-  var dropZone = document.getElementById('drop_zone');
-  dropZone.addEventListener('dragover', handleDragOver, false);
-  dropZone.addEventListener('drop', handleFileSelect, false);
-</script>
+    }
+
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    }
+
+    // Setup the dnd listeners.
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', handleFileSelect, false);
+  </script>
+</div>
   </body>
 </html>
