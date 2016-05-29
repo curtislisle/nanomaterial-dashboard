@@ -33,7 +33,7 @@ def run(data=None):
 	data = json.loads(data)
 	data = data.split(',')[1];
 	#data = base64.decode(data);
-	f = open('/vagrant/dashboard/pdf2csv/data.pdf', 'w')
+	f = open('/home/vagrant/nanomaterial-dashboard/pdf2csv/data.pdf', 'w')
 	f.write(base64.decodestring(data))
 	f.close()
 	#response['data'] = data
@@ -42,8 +42,8 @@ def run(data=None):
 
 	##java -jar target/tabula-0.8.0-jar-with-dependencies.jar --pages 1 document.pdf --outfile item1.csv
 	##output = os.popen('/usr/bin/java -jar ../jar/tabula-java/target/tabula-0.8.0-jar-with-dependencies.jar --pages 1 ../jar/tabula-java/document.pdf --outfile ../dump/item1.csv').read()
-	output = subprocess.check_output(['/usr/bin/java', '-jar', '/vagrant/dashboard/pdf2csv/jar/tabula-java/target/tabula-0.8.0-jar-with-dependencies.jar', '/vagrant/dashboard/pdf2csv/data.pdf', '--pages', '1', '--silent', '--outfile', '/vagrant/dashboard/pdf2csv/dump/item1.csv'], shell=False, stderr=subprocess.STDOUT)
-	sourcefile = '/vagrant/dashboard/pdf2csv/dump/item1.csv'	
+	output = subprocess.check_output(['/usr/bin/java', '-jar', '/home/vagrant/nanomaterial-dashboard/pdf2csv/jar/tabula-java/target/tabula-0.8.0-jar-with-dependencies.jar', '/home/vagrant/nanomaterial-dashboard/pdf2csv/data.pdf', '--pages', '1', '--silent', '--outfile', '/home/vagrant/nanomaterial-dashboard/pdf2csv/dump/item1.csv'], shell=False, stderr=subprocess.STDOUT)
+	sourcefile = '/home/vagrant/nanomaterial-dashboard/pdf2csv/dump/item1.csv'	
 
 
 	characterList = []
