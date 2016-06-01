@@ -133,6 +133,8 @@
 					} else {
 						headertmp = invertheader;
 					}
+
+					// copy the entire table to an array and add to the database
 					longArr = []
 					for (u = 0; u < defaulttables.length; u++) {
 						fullArr = []
@@ -141,10 +143,14 @@
 							tmpitem[headertmp[v].title] = defaulttables[u][v];
 							fullArr.push(tmpitem);
 						}
-						longArr.push(fullArr);
+						// if this is a selected particle, include it in the output
+						if (selectedArr.indexOf(fullArr[0]["ID"]) >= 0) {
+							longArr.push(fullArr);
+						}
 					}
-					console.log(longArr);
-					console.log($("input[name=dataview]:radio").attr("value"));
+
+					//console.log(longArr);
+					//console.log($("input[name=dataview]:radio").attr("value"));
 					orientation = $("input[name=dataview]:radio").attr("value");
 					serviceUrl = "service/savedata"
 					$.ajax({
