@@ -136,6 +136,9 @@
 					} else {
 						headertmp = invertheader;
 					}
+
+					// copy the entire table to an array and add to the database
+					/*
 					longArr = []
 					for (u = 0; u < defaulttables.length; u++) {
 						fullArr = []
@@ -146,6 +149,20 @@
 						}
 						longArr.push(fullArr);
 					}
+					*/
+
+					// copy only the selected rows to an array and add to the database
+					longArr = []
+					for (u = 0; u < selectedArr.length; u++) {
+						fullArr = []
+						for (v = 0; v < selectedArr[u].length; v++) {
+							tmpitem = {};
+							tmpitem[headertmp[v].title] = selectedArr[u][v];
+							fullArr.push(tmpitem);
+						}
+						longArr.push(fullArr);
+					}
+
 					console.log(longArr);
 					console.log($("input[name=dataview]:radio").attr("value"));
 					orientation = $("input[name=dataview]:radio").attr("value");

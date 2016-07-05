@@ -1,0 +1,143 @@
+<!doctype html>
+<meta charset=utf-8>
+
+<style>
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        padding-top: 50px;
+    }
+</style>
+
+
+
+<script src=http://code.jquery.com/jquery-1.9.1.js></script>
+<script src=http://code.jquery.com/ui/1.9.1/jquery-ui.js></script>
+<script src=js/jquery.csv-0.71.js></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<link href=http://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css rel=stylesheet>
+<!--
+<link href=http://bootswatch.com/cosmo/bootstrap.min.css rel=stylesheet type=text/css>
+<link href=//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css rel=stylesheet>
+<script src=http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js></script>
+-->
+<script src=http://d3js.org/d3.v3.min.js></script>
+
+
+<script src=/js/tangelo.js></script>
+
+
+<!-- comes with SlickGrid but brings small font and yelllow background  -->
+<link rel="stylesheet" href="css/examples.css" type="text/css"/>
+
+<!-- used for the tabs in the interface between different utilities -->
+<link rel="stylesheet" href="css/tabs.css" type="text/css"/>
+
+<script src=dropUploader.js></script>
+
+<div id=info-panel class="modal fade">
+    <div class=modal-dialog>
+        <div class=modal-content>
+            <div class=modal-header>
+                <h3>Information</h3>
+            </div>
+
+            <div class=modal-body>
+                <p>The application supports the output of nanomaterial datasets from the PDF Extraction table and from the bart
+                text annotation interface. </p>
+            </div>
+
+            <div class=modal-footer>
+                <a class="btn btn-default" data-dismiss=modal>OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class=navbar-header>
+        <a class=navbar-brand href=/examples>Nanomaterial Dashboard</a>
+    </div>
+
+    <ul class="nav navbar-nav">
+        <li class=active> <a>Dataset Utilities</a>
+        <li><a style=cursor:pointer data-toggle=modal data-target=#info-panel><span class="glyphicon glyphicon-info-sign"></span> Info</a>
+    </ul>
+</div>
+
+
+<div class=col-md-12>
+
+<ul id='nano-utilities' class="tab">
+  <li><a href="#" class="tablinks" onclick="openTab(event, 'PDF-Table')">PDF Table</a></li>
+  <li><a href="#" class="tablinks" onclick="openTab(event, 'Brat')">Brat Annotation</a></li>
+</ul>
+
+
+<!-- PDF Table management -->
+<div id="PDF-Table" class="tabcontent">
+    <h4 style="margin-left:30px">PDF Table Extraction Datasets</h4>
+    <p style="margin-top:20px; margin-left:30px; margin-right:20px">Click the download button to download
+                new particle records in a format compatible with the NMR import/export spreadsheet format This will create a CSV 
+                dataset where particle names and values are output unrolled in the Measureand (R) and MeasurementValue (AA) columnes. If a desired material ID or name is not assigned below, 
+                the exporter will look for fields in the data itself</p>
+
+    <input id="tableforceid" style="margin-top:40px; margin-left:20px"> Forced Material ID</input>
+    <input id="tableforcename" style="margin-top:40px; margin-left:20px"> Forced Material Name</input>
+    <div id=processTableButton class="btn btn-success " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Export Table Records</div>
+      <p style="margin-top:20px; margin-left:30px; margin-right:20px">To delete all current PDF Table extraction content from the dataset, please click the Clear Table Extraction Records button below.  All saved output from previous saved selections from the PDF Table will be removed.  This operation is used 
+      when the user wants to begin processing using a different table and needs all previous records removed.</p>  
+       <div id=deleteTableButton class="btn btn-danger " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Delete all Table Records</div> 
+</div>
+
+    <!-- BRAT management -->
+<div id="Brat" class="tabcontent">
+
+    <h4 style="margin-top:20px; margin-left:20px">Text Annotations in Brat</h4>
+
+   <h4 style="margin-left:30px">Text Drop Zone</h4>
+    <p style="margin-left:30px; margin-right:20px">Drop one or more text versions of papers on the area below to cause them to be uploaded for further processing</p>
+    <div id="drop_zone" style="margin-left:30px; margin-top:20px; width:250px; height:100px; background-color:darkseagreen"><h>Drop files here</h></div>
+
+
+    <p style="margin-top:50px; margin-right:20px; margin-left:20px">Select the datafile to operate on in the selector below, then you may choose to delete all annotations on that file or export the existing annotations for upload in a format compatible with the National Nanomaterial Registry </p>
+    <select id="sourcetextnames" class="form-control"  style="margin-left:40px; margin-right:40px;min-width:150px;width:75%" ></select>
+  
+        <p style="margin-right:20px; margin-left:20px;margin-top:40px;">Automatically search for entities
+            in the selected source text </p>
+    <input id="targetword" style="margin-top:40px; margin-left:20px">target word (e.g. toxicity)</input>
+    <input id="maxdistance" style="margin-top:40px; margin-left:20px">Max Search Distance (characters)</input>
+    <div id=doAnnotations class="btn btn-success " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Generate Annotations</div>
+
+    <hr style="height:10px">
+
+        <p style="margin-right:20px; margin-left:20px;margin-top:40px;">Click the button below to export  existing annotations, for the file selected above, in a format compatible with the National Nanomaterial Registry </p>
+    <input id="nlpforceid" style="margin-top:40px; margin-left:20px"> Forced Material ID</input>
+    <input id="nlpforcename" style="margin-top:40px; margin-left:20px"> Forced Material Name</input>
+    <div id=processBratButton class="btn btn-success " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Export Selected Annotations</div>
+
+    <hr style="height:10px">
+
+    <p style="margin-top:20px; margin-left:30px; margin-right:20px">To delete all annotations from the currently
+    selected text file, click the button below.  This will reset the text to an unannotated state -- ready
+    for a new hand or automatic annotation session to begin. </p>  
+       <div id=deleteAnnotationsButton class="btn btn-danger " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Delete Annotations for Selected Text</div>   
+</div> 
+    
+
+</div>
+
+
+
+
+  <div id=download </div>
+
