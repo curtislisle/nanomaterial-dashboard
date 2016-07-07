@@ -12,29 +12,25 @@
 </style>
 
 
-
 <script src=http://code.jquery.com/jquery-1.9.1.js></script>
 <script src=http://code.jquery.com/ui/1.9.1/jquery-ui.js></script>
+
 <script src=js/jquery.csv-0.71.js></script>
 
 <!-- Latest compiled and minified CSS -->
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
 <link href=http://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css rel=stylesheet>
-<!--
-<link href=http://bootswatch.com/cosmo/bootstrap.min.css rel=stylesheet type=text/css>
-<link href=//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css rel=stylesheet>
-<script src=http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js></script>
--->
+
 <script src=http://d3js.org/d3.v3.min.js></script>
 
-
+<!--
 <script src=/js/tangelo.js></script>
-
+-->
 
 <!-- comes with SlickGrid but brings small font and yelllow background  -->
 <link rel="stylesheet" href="css/examples.css" type="text/css"/>
@@ -63,14 +59,17 @@
     </div>
 </div>
 
+
+
 <div class="navbar navbar-default navbar-fixed-top">
     <div class=navbar-header>
-        <a class=navbar-brand href=/examples>Nanomaterial Dashboard</a>
+        <a class=navbar-brand >Nanomaterial Dashboard</a>
     </div>
 
     <ul class="nav navbar-nav">
         <li class=active> <a>Dataset Utilities</a>
         <li><a style=cursor:pointer data-toggle=modal data-target=#info-panel><span class="glyphicon glyphicon-info-sign"></span> Info</a>
+
     </ul>
 </div>
 
@@ -79,7 +78,7 @@
 
 <ul id='nano-utilities' class="tab">
   <li><a href="#" class="tablinks" onclick="openTab(event, 'PDF-Table')">PDF Table</a></li>
-  <li><a href="#" class="tablinks" onclick="openTab(event, 'Brat')">Brat Annotation</a></li>
+  <li><a href="#" class="tablinks" onclick="openTab(event, 'Brat')">Text Annotation</a></li>
 </ul>
 
 
@@ -102,36 +101,61 @@
     <!-- BRAT management -->
 <div id="Brat" class="tabcontent">
 
-    <h4 style="margin-top:20px; margin-left:20px">Text Annotations in Brat</h4>
+    <h4 style="margin-top:20px; margin-left:20px">Upload and Process Texts Using brat</h4>
 
-   <h4 style="margin-left:30px">Text Drop Zone</h4>
+   <h4 style="margin-top:40px;margin-left:30px">Text Drop Zone</h4>
     <p style="margin-left:30px; margin-right:20px">Drop one or more text versions of papers on the area below to cause them to be uploaded for further processing</p>
     <div id="drop_zone" style="margin-left:30px; margin-top:20px; width:250px; height:100px; background-color:darkseagreen"><h>Drop files here</h></div>
 
-
-    <p style="margin-top:50px; margin-right:20px; margin-left:20px">Select the datafile to operate on in the selector below, then you may choose to delete all annotations on that file or export the existing annotations for upload in a format compatible with the National Nanomaterial Registry </p>
-    <select id="sourcetextnames" class="form-control"  style="margin-left:40px; margin-right:40px;min-width:150px;width:75%" ></select>
+   <h4 style="margin-top:40px;margin-left:30px">Select a Text to Work With</h4>
+    <p style="margin-top:20px; margin-right:20px; margin-left:30px">Select the datafile to operate on in the selector below, then you may choose to delete all annotations on that file or export the existing annotations for upload in a format compatible with the National Nanomaterial Registry </p>
+    <select id="sourcetextnames" class="form-control"  style="margin-left:30px; margin-right:40px;min-width:150px;width:75%" ></select>
   
-        <p style="margin-right:20px; margin-left:20px;margin-top:40px;">Automatically search for entities
+    <h4 style="margin-top:40px;margin-left:30px">Generate and Export Annotations</h4>
+    <p style="margin-right:20px; margin-left:20px;margin-top:40px;">Automatically search for entities
             in the selected source text </p>
-    <input id="targetword" style="margin-top:40px; margin-left:20px">target word (e.g. toxicity)</input>
-    <input id="maxdistance" style="margin-top:40px; margin-left:20px">Max Search Distance (characters)</input>
-    <div id=doAnnotations class="btn btn-success " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Generate Annotations</div>
+    <div class=row>
+      <input id="targetword" style="margin-top:40px; margin-left:35px"> target word (e.g. toxicity)</input>
+      <input id="maxdistance" style="margin-top:40px; margin-left:30px"> Max Search Distance (characters)</input>
+    </div>
+    <div id=doAnnotations class="btn btn-success " style="margin-top:20px;margin-bottom:10px; margin-left:20px">Generate Annotations</div>
     <p id="annotationCount"> </p>
 
     <hr style="height:10px">
 
         <p style="margin-right:20px; margin-left:20px;margin-top:40px;">Click the button below to export  existing annotations, for the file selected above, in a format compatible with the National Nanomaterial Registry </p>
-    <input id="nlpforceid" style="margin-top:40px; margin-left:20px"> Forced Material ID</input>
-    <input id="nlpforcename" style="margin-top:40px; margin-left:20px"> Forced Material Name</input>
-    <div id=processBratButton class="btn btn-success " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Export Selected Annotations</div>
+    <div class=row>
+      <input id="nlpforceid" style="margin-top:40px; margin-left:35px"> Forced Material ID</input>
+      <input id="nlpforcename" style="margin-top:40px; margin-left:30px"> Forced Material Name</input>
+    </div>
+    <div id=processBratButton class="btn btn-success " style="margin-top:20px;margin-bottom:10px; margin-left:20px">Export Selected Annotations</div>
 
     <hr style="height:10px">
-
+    <h4 style="margin-top:40px;margin-left:30px">Deleta All Annotations on a Text</h4>
     <p style="margin-top:20px; margin-left:30px; margin-right:20px">To delete all annotations from the currently
     selected text file, click the button below.  This will reset the text to an unannotated state -- ready
     for a new hand or automatic annotation session to begin. </p>  
        <div id=deleteAnnotationsButton class="btn btn-danger " style="margin-top:10px;margin-bottom:10px; margin-left:20px">Delete Annotations for Selected Text</div>   
+
+    <!-- export for NMR compatible records -->
+    <hr style="height:10px">
+    <h4 style="margin-top:40px;margin-left:30px">Export Text Annotations in NMR compatible Format</h4>
+       <p style="margin-top:20px; margin-left:30px; margin-right:20px">Select the options below
+       for the output columns and select the export button to generate a CSV file in NMR-compatible format </p>  
+
+<!-- below is a form with a selector for each column that we want to potentially fill out
+     the user will select from the values in the columns for the annotations to export
+ -->
+
+<div class=row>
+    <text style='margin-left:50px; margin-bottom: 5px'>Choose Format to use for Output: </text>
+    <select class='form-control' style='margin-left:50px; width:50%' id='formatSelect'></select>
+</div>
+<div id=processFormattedBratButton class="btn btn-success " style="margin-top:30px;margin-bottom:10px; margin-left:30px">Export Selected Annotations Using Chosen Format</div>
+
+
+
+
 </div> 
     
 

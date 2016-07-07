@@ -1,0 +1,15 @@
+{"description": "configuration file for Nanomaterial Dashboard Utilities",
+ "version": 1,
+ "brat_directory":"/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers",
+  "output_formats": [
+  	{"title": "Component Molecular Weight",
+  	 "output_table" : "PCC",
+  	 "format": {"Q": "Composition","R":"Component Molecular Weight","AA": "<value>","AC":"gr/mol","AF":"1"}},
+  	{"title": "Toxicity", 
+  	 "output_table": "Study",
+  	 "format":{"l":"Endpoint","M":"1","N":"Toxicity","P":"Cytoxicity(<entity>)","AB":"Reported Quantitatively"}},
+  	{"title": "Mean Hydrodynamic Diameter", 
+  	 "output_table":"PCC",
+  	 "format": {"Q": "Particle Size","R":"Mean Hydrodynamic Diameter","U":"Dynamic Light Scattering","AA": "<value>","AC":"nm"}}
+  ]
+}

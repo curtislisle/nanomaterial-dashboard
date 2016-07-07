@@ -7,6 +7,12 @@ import tangelo
 from os import listdir
 from os.path import isfile, join
 
+# used for sorting dictionary alphabetically
+import operator
+
+# NOTE:  This file is identical to exportBratAnnotations.py except for the different
+# output format, which outputs using named columns.
+
 # start annotations as an empty dictionary, each type will have a key and its
 # own dictionary indexed by name/identifier
 
@@ -38,17 +44,77 @@ def returnValueIdentForAttributeIdentity(ident):
                 return annotations['relations'][rel]['arg2']
             elif annotations['relations'][rel]['arg2'] == ident:
                 return annotations['relations'][rel]['arg1']
-                
-    
+ 
+
+
+# output the header row in alphabetic order with single letter columns coming before multiple letter 
+# columns.  This only supports up to 2-letter columns, though it could be generalized for arbitrary length
+
+def generateFormattedHeaderRow(name,formats):
+    selectedformat = None
+    for form in formats:
+        if form['title'] == name:
+            selectedformat = form
+            break
+    if selectedformat != None:
+        # found a good format, write in order by finding the sorted order from the format dictionary
+        sorted_cols = sorted(selectedformat['format'].items(), key=operator.itemgetter(0))
+        # now we have a list of columns in alphabetic order, without regard to length, sadly "AA" is before "Q"
+        # so we need to handle the single letter cases first
+        print sorted_cols
+        # start with the ID and name columns already in place
+        entry = ['A','B']
+        # go through as pass=1 and pass=2 to add single letter names first, then two letter names
+        for algorithm_pass in range(1,3): 
+            for keyvalue in sorted_cols:
+                if len(keyvalue[0]) == algorithm_pass:
+                    entry.append(keyvalue[0])
+    #print entry
+    return entry
+
+
+def generateFormattedMaterialPropertyEntry(materialid,entName,attrib,value,formatname,formats):
+    pass
+
+
+def generateFormattedMeasurementEntry(materialid,materialname,propName,value, formatname, formats):
+    selectedformat = None
+    for form in formats:
+        if form['title'] == formatname:
+            selectedformat = form
+            break
+    if selectedformat != None:
+        # found a good format, write in order by finding the sorted order from the format dictionary
+        sorted_cols = sorted(selectedformat['format'].items(), key=operator.itemgetter(0))
+        # now we have a list of columns in alphabetic order, without regard to length, sadly "AA" is before "Q"
+        # so we need to handle the single letter cases first
+        print sorted_cols
+        # start with the ID and name columns already in place
+        entry = [materialid,materialname]
+        # go through as pass=1 and pass=2 to add single letter names first, then two letter names
+        for algorithm_pass in range(1,3): 
+            for keyvalue in sorted_cols:
+                if len(keyvalue[0]) == algorithm_pass:
+                    # output the value from the format spec unless it is the value keyword, which is replaced by
+                    # the actual value
+                    entry.append(keyvalue[1].replace('<value>',value))
+    #print entry
+    return entry
+
+
 # this loop goes through all annotations and outputs them in a format compatible with the nanomaterial
 # registry or further processing.  It uses two passes: first pass outputs properties which are assigned
-# to specific nanomaterials through the "NanoProperty" relation. 
+# to specific nanomaterials through the "NanoProperty" relation.  
+
+# this algorithm is a simple extension of the algorithm used in the unformatted (direct) output. only the formatting
+# of the lines has been adjusted by calling re-ordering functions instead.
     
-def processAnnotations(materialname,materialid):
+def processAnnotations(materialname,materialid,formatname,formats):
     outstring = ''
     outtable = []
     # put in the header row for the CSV
-    entry = ['ID','Name','Measurement','Value']
+
+    entry = generateFormattedHeaderRow(formatname,formats)
     outtable.append(entry)
 
     # now loop through all the relations and output rows for each
@@ -68,7 +134,7 @@ def processAnnotations(materialname,materialid):
                 value = annotations['entities'][valueIdent]
                 #print "(",entName,attrib, value,")"
                 #outstring += materialid + ','+ entName + ',' + attrib + ',' + value+ '\n'
-                entry = [materialid,entName,attrib,value]
+                entry = generateFormattedMaterialPropertyEntry(materialid,entName,attrib,value,formatname,formats)
                 outtable.append(entry)
             except:
                 pass
@@ -85,7 +151,7 @@ def processAnnotations(materialname,materialid):
                 #print 'found propname:', propName
                 value  = annotations['entities'][annotations['relations'][rel]['arg2']]
                 #print 'found value:',value
-                entry = [materialid,materialname,propName,value]
+                entry = generateFormattedMeasurementEntry(materialid,materialname,propName,value,formatname,formats)
                 outtable.append(entry)
             except:
                 pass
@@ -97,16 +163,14 @@ def processAnnotations(materialname,materialid):
 # type extension .ann  
 
 
-def run(filename=None,materialname=None,materialid=None,directory=None):
+def run(filename=None,materialname=None,materialid=None,directory=None,formatname=None,configstring=None):
     # Create an empty response object.
     response = {}
 
-    # assign default directory if none is provided
-    #if directory == None:
-    #    directory = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers/'
-    #if filename == None:
-    #    filename = '01-body.ann'
-             
+    # we have to decode the dictionary from its stringified version required to pass through AJAX
+    config = json.loads(configstring)
+    #print 'config=',config
+
    # if the user assigned an ID, it is to be assigned to all unassigned records.
    # Therefore, any records that don't have a particle name specifically annotated will 
    # have derived values assigned.
@@ -132,7 +196,7 @@ def run(filename=None,materialname=None,materialid=None,directory=None):
             # after the second tab is the identifier value
             value = splits[2]
             foundEntity(ident, value)
-    annotations = processAnnotations(outputname,outputID)
+    annotations = processAnnotations(outputname,outputID,formatname,config['output_formats'])
     f.close()
 
 

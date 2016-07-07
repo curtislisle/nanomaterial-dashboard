@@ -22,6 +22,11 @@ def run(database='NanoDB3',collection='saved_pdf_output',materialid='',materialn
         result = fullcoll.find(query)
 
         outtable = []
+        # put in the header row for the CSV
+        entry = ['ID','Name','Measurement','Value']
+        outtable.append(entry)
+
+        # now loop through the records in the database and output them one per line into the outtable variable
         for record in result:
             for attrib in record:
                 if attrib != 'ID':

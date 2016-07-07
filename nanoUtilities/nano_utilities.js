@@ -15,6 +15,7 @@
 var nano_utilities = {}
 nano_utilities.fileArray = []
 nano_utilities.fileCount = 0
+nano_utilities.config = {}
 
 // this is the location of the nanomaterial papers directory.  It is used by the utilities to 
 // create and reset annotation files.  
@@ -127,11 +128,8 @@ function openTab(evt, cityName) {
     evt.currentTarget.className += " active";
 }
 
-
-
-
-// check the annotation database and fill the selector with all the existing text files. If there
-// are none, the service returns the value "default" as the first project name
+// check the annotation database and fill the selector with all the existing text files. A second
+// selector allows users to pick the output format they want for formatted NLP export records
 
 function initializeDocumentSelector() {
         d3.select("#sourcetextnames").selectAll("option").remove();
@@ -142,6 +140,15 @@ function initializeDocumentSelector() {
                 .enter().append("option")
                 .text(function (d) { return d; });
         });
+}
+
+
+function initializeOutputFormatSelector() {
+        d3.select("#formatSelect").selectAll("option").remove();
+            d3.select("#formatSelect").selectAll("option")
+                .data(nano_utilities.config.output_formats)
+                .enter().append("option")
+                .text(function (d) { return d.title; });
 }
 
 
@@ -173,7 +180,6 @@ function exportBratDataset() {
 
 
 
-
 function write_NLP_Output(content) {
   
     // write out arrays in CSV format
@@ -199,6 +205,40 @@ function write_NLP_Output(content) {
     pom.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
     pom.setAttribute('download', 'nano_nlp_export.csv');
     pom.click();
+}
+
+
+
+
+function exportFormattedBratDataset() {
+
+  var fileselector = d3.select("#sourcetextnames").node();
+  var textname = fileselector.options[fileselector.selectedIndex].text;
+  var materialname = document.getElementById('nlpforcename').value;
+  var materialid =  document.getElementById('nlpforceid').value;
+
+  var formatselector = d3.select("#formatSelect").node();
+  var formatname = formatselector.options[formatselector.selectedIndex].text;
+  var brattextdir = nano_utilities.config.brat_directory
+
+  // the filename will have a .txt extension, so lets trim this off and add the .ann for the
+  // annotation file we want to search for
+  annotationname = textname.substring(0,textname.indexOf('.'))+'.ann'
+
+  // now call a python service to read the Brat standoff format and export a CSV table. The formatting 
+  // spec is included as a parameter so the output routine and format accordingly to the selected line of the spec
+
+  data = {filename: annotationname, materialname : materialname, materialid: materialid, directory: brattextdir,
+          formatname: formatname, configstring: JSON.stringify(nano_utilities.config)};
+  $.ajax({
+      url: "service/exportFormattedBratAnnotation",
+      data: data,
+      dataType: "json",
+      success: function (response) {
+          console.log(response)
+          write_NLP_Output(response)
+      }
+    });
 }
 
 
@@ -299,7 +339,14 @@ function runAutoAnnotation() {
     });
 }
 
-
+function processConfigurationFile() {
+  console.log('loading default configuration options from config.json')
+  d3.json('config.json', function (error, configoptions) {
+            nano_utilities.config = configoptions
+            console.log(nano_utilities.config)
+            initializeOutputFormatSelector();
+        });
+}
 
 
 // this function is called as soon as the page is finished loading
@@ -309,7 +356,9 @@ window.onload = function () {
         var dropZone = document.getElementById('drop_zone');
         dropZone.addEventListener('dragover', handleDragOver, false);
         dropZone.addEventListener('drop', handleFileSelect, false);
-        
+
+        processConfigurationFile();
+
         initializeDocumentSelector();
 
         // set a watcher on the UI buttons to take action when they are clicked
@@ -328,5 +377,8 @@ window.onload = function () {
 
    d3.select("#deleteAnnotationsButton")
       .on("click",deleteAnnotations);
+
+   d3.select("#processFormattedBratButton")
+      .on("click",exportFormattedBratDataset);
 
 };
