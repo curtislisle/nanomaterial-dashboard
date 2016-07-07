@@ -77,14 +77,14 @@ def processAnnotations(materialname,materialid):
             # actually need to check for out of order args
             try:
                 propName = annotations['entities'][annotations['relations'][rel]['arg1']]
-                print 'found propname:', propName
+                #print 'found propname:', propName
                 value  = annotations['entities'][annotations['relations'][rel]['arg2']]
-                print 'found value:',value
+                #print 'found value:',value
                 entry = [materialid,materialname,propName,value]
                 outtable.append(entry)
             except:
                 pass
-    print outtable
+    #print outtable
     return outtable
 
 
@@ -97,10 +97,10 @@ def run(filename=None,materialname=None,materialid=None,directory=None):
     response = {}
 
     # assign default directory if none is provided
-    if directory == None:
-        directory = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers/'
-    if filename == None:
-        filename = '01-body.ann'
+    #if directory == None:
+    #    directory = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers/'
+    #if filename == None:
+    #    filename = '01-body.ann'
              
    # if the user assigned an ID, it is to be assigned to all unassigned records.
    # Therefore, any records that don't have a particle name specifically annotated will 

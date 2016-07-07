@@ -23,6 +23,14 @@ nano_utilities.bratLocation = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/na
 
 //------ beginning drag & drop support ----------------------------------------
 
+// this function is needed to strip non-ASCII characters to pass the string through 
+// the AJAX call smoothly.  Reference: http://www-01.ibm.com/support/docview.wss?uid=swg21453096
+
+function inString(str)
+{
+return str.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '') ; 
+}
+
 
 function load(file) {
 var xmlfilecontent = []
@@ -45,12 +53,12 @@ if (file==null)
         for (var i = nano_utilities.fileArray.length - 1; i >= 0; i--) {
 
           data = {filename: nano_utilities.fileArray[i]['name'], 
-                  filecontents: nano_utilities.fileArray[i]['contents'],
+                  filecontents: inString(nano_utilities.fileArray[i]['contents']),
                   directory: nano_utilities.bratLocation};
           $.ajax({
               url: "service/uploadTexts",
+              type: 'PUT',
               data: data,
-              dataType: "json",
               success: function (response) {
                   console.log(response)
                   // we uploaded a new text file, so update the selection list so this file is included
@@ -143,7 +151,7 @@ function exportBratDataset() {
   var textname = fileselector.options[fileselector.selectedIndex].text;
   var materialname = document.getElementById('nlpforcename').value;
   var materialid =  document.getElementById('nlpforceid').value;
-  var brattextdir = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers'
+  var brattextdir = nano_utilities.bratLocation
 
   // the filename will have a .txt extension, so lets trim this off and add the .ann for the
   // annotation file we want to search for
@@ -284,7 +292,9 @@ function runAutoAnnotation() {
       data: data,
       dataType: "json",
       success: function (response) {
-          console.log(response)
+          console.log('found ',response.result, ' annotations')
+          var report = '(found '+response.result.toString()+' annotations)'
+          document.getElementById('annotationCount').innerHTML = report;
       }
     });
 }

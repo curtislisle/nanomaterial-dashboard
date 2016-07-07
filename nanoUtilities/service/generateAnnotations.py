@@ -1,5 +1,6 @@
 import nltk
 import numbers
+import bson.json_util
 
 # is a value a number or a string? 
 # from http://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-is-a-number-float-in-python
@@ -118,6 +119,9 @@ def run(SearchDistance=200,textpath=None,targetword='toxicity',filename=None):
 
     fout.close()
     f.close()
+    response = {}
+    response['result'] = totalrecordcount
+    return bson.json_util.dumps(response)
 
 
         
