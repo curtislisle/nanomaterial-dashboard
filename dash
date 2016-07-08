@@ -29,7 +29,7 @@ elif [ -z "${port}" ]; then
     # If the "port" argument is missing, then assume the "hostname" argument is
     # actually the port.
     port=${hostname}
-    hostname=localhost
+    hostname=0.0.0.0
 fi
 
 # Find the absolute path to this script.

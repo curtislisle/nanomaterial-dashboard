@@ -1,6 +1,6 @@
 {"description": "configuration file for Nanomaterial Dashboard Utilities",
  "version": 1,
- "brat_directory":"/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers",
+ "brat_directory":"/home/vagrant/brat-v1.3_Crunchy_Frog/data/nano_papers",
   "output_formats": [
   	{"title": "Component Molecular Weight",
   	 "output_table" : "PCC",

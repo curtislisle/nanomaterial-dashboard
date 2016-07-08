@@ -20,7 +20,7 @@ nano_utilities.config = {}
 // this is the location of the nanomaterial papers directory.  It is used by the utilities to 
 // create and reset annotation files.  
 
-nano_utilities.bratLocation = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers'
+nano_utilities.bratLocation = '/home/vagrant/brat-v1.3_Crunchy_Frog/data/nano_papers'
 
 //------ beginning drag & drop support ----------------------------------------
 
@@ -248,7 +248,7 @@ function exportTableDataset() {
   var materialname = document.getElementById('tableforcename').value;
   var materialid =  document.getElementById('tableforceid').value;
   var dbname = 'NanoDB3'
-  var collname = 'saved_pdf_output'
+  var collname = 'saved_pdf_data_rows'
 
   data = {database: dbname, collection: collname, materialname : materialname, materialid: materialid};
   $.ajax({
@@ -324,7 +324,7 @@ function runAutoAnnotation() {
   var searchdist =  document.getElementById('maxdistance').value;
   var fileselector = d3.select("#sourcetextnames").node();
   var textname = fileselector.options[fileselector.selectedIndex].text;
-  var brattextdir = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers'
+  var brattextdir = nano_utilities.config.brat_directory 
 
   data = {filename: textname, textpath: brattextdir, SearchDistance : searchdist, targetword: searchtarget};
   $.ajax({

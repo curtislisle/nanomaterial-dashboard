@@ -11,7 +11,7 @@ import csv
 client = MongoClient('localhost', 27017);
 
 
-def run(database='NanoDB3',collection='saved_pdf_output',materialid='',materialname=''):
+def run(database='NanoDB3',collection='saved_pdf_data_rows',materialid='',materialname=''):
         response = {}
 
         db = client[database]

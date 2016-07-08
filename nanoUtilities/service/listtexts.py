@@ -19,7 +19,8 @@ def run(directory=None):
 
     # assign default directory if none is provided
     if directory == None:
-        directory = '/Users/clisle/code/brat-v1.3_Crunchy_Frog/data/nano_papers/'
+	print 'warning: python service listtexts.py using hard-coded pathname'
+        directory = '/home/vagrant/brat-v1.3_Crunchy_Frog/data/nano_papers/'
 
     # build a list of files returned from the listdir() call on the target directory
     onlyfiles = [f for f in listdir(directory) if isfile(join(directory, f))]
